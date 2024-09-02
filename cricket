@@ -1,0 +1,110 @@
+package mygame2;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Game {  
+    public static void main(String[] args) {
+    	
+        int[] predefinedValues = {1, 2, 3, 4, 6};
+      
+        int userScore = 0;
+        int outs = 0;
+        int attempts = 18;
+        int totalattempts=18;
+
+        Random random = new Random();
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter Your Name:");
+        String userName= scanner.next();
+        Random target = new Random();
+   	    int randomNumber = target.nextInt(15)+45;
+   	   
+        System.out.println("WELCOME..!!! ");
+        System.out.println("Hi "+userName +","+" Your Target is " + randomNumber + " in 3 Overs(3 Wickets)");
+        System.out.println("!!... GAME RULES ...!!");
+        System.out.println(" 1.For Scoring Runs ( 1,2,3,4,6), For a Dot Ball(5)");
+        System.out.println(" 2.If You Match The Opponent Hit Then you Are !!! OUT !!!");
+        System.out.println(" 3.If You Hit Opposite To Opponent Then You Will Get Your Hit As Runs");
+        
+       
+        int roundOuts = 0; // outs in current round
+        int roundNumber = 1; // current round number
+
+        for (int i = 0; i < attempts; i++) {
+            System.out.println("Hit: ");
+            int userValue = scanner.nextInt();
+
+            if (!isPredefinedValue(predefinedValues, userValue)) {
+                System.out.println("Dot Ball !!!  Your Score : "+ userScore);
+                continue;
+            }
+            int codeValue = getCodeValue(predefinedValues, random);
+
+            System.out.println("Opponent hit: " + codeValue);
+          
+            if (userValue == codeValue) {
+               
+                System.out.println("OUT!!");
+                System.out.println("your score:"+userScore  );
+                outs++;
+                roundOuts++;
+                if (outs == 3) {
+                    break;
+                }
+            } else {
+                int scoreIncrement = userValue; // score increment is the user's value
+                userScore += scoreIncrement;
+                System.out.println("Your Score : " + userScore   );
+                
+            }
+            if (userScore>=randomNumber) {
+            	System.out.println("Congratulations!!! You Won The Match By "+(totalattempts-1) +" Balls");
+            	System.out.println("Your Score :"+userScore+"/"+roundOuts+ "  Balls Left "+ (totalattempts-1));
+            	return;
+            }
+           
+            totalattempts--;
+            if ((i + 1) % 6 == 0) {
+            	
+                System.out.println(" " + roundNumber + " over! Completed");
+                System.out.println("ScoreCard: " + userScore + "/" + roundOuts  );
+                roundNumber++;// increment round number
+                
+            }
+            
+            }
+       
+        if (outs == 3) {
+        	
+            System.out.println("Game over! You Lost The Match By "+(randomNumber-userScore) + " Balls");
+            		
+            System.out.println("ScoreCard: " + userScore + "/" + roundOuts +"  Balls Left:"+(totalattempts-1));
+            
+        } else {
+        	
+            System.out.println("You Lost By "+ (randomNumber-userScore) + " Runs");
+            System.out.println("ScoreCard: " + userScore + "/" + roundOuts +"  Balls Left:"+(totalattempts));
+           
+        }
+      if (userScore >=randomNumber) {
+        	System.out.println("YOU WON!!");
+        	System.out.println("Congratulations!");
+        	System.out.println("ScoreCard: " + userScore + "/" + roundOuts +"  Balls Left:"+(totalattempts-1) );
+        	
+        }
+   
+        }
+    private static boolean isPredefinedValue(int[] predefinedValues, int value) {
+        for (int predefinedValue : predefinedValues) {
+            if (predefinedValue == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static int getCodeValue(int[] predefinedValues, Random random) {
+        return predefinedValues[random.nextInt(predefinedValues.length)];
+    }
+}
